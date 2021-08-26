@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>{% block title%} {%endblock%}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                {% if not request.user.is_authenticated %}
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'client:login' %}">Login</a></li>
+                    <li><a href="{% url 'client:register' %}">Registro</a></li>
+                </ul>
+                {% else %}
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="{% url 'client:dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'client:show' user.username %}">Mostrar Detalles</a></li>
+                    <li><a href="{% url 'client:edit' %}">Editar Usuario</a></li>
+                    <li><a href="{% url 'client:edit_password' %}">Cambiar Password</a></li>
+                    <li><a href="{% url 'client:logout' %}">Logout</a></li>
+                </ul>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <h3>{%block subtitle%}{%endblock%}</h3>
+    {% if messages %}
+        <ul>
+        {% for msg in messages %}
+            <li {%if msg.tags %} class="{{msg.tags}}_message"{%endif%}>{{ msg }}</li>
+        {% endfor%}
+        </ul>
+    {% endif %}
+
+    {%block content%}{%endblock%}
+
+</body>
+</html>
